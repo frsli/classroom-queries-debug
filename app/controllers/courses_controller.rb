@@ -7,16 +7,17 @@ class CoursesController < ApplicationController
 
   def show
     the_id = params.fetch("path_id")
-    @course = Course.where({:id => the_id }).at(0)
+    matching_course = Course.where({:id => the_id})
+    @course = matching_course.at(0)
 
     render({ :template => "courses/show" })
   end
 
   def create
     @course = Course.new
-    @course.title = params.fetch("query_title")
-    @course.term_offered = params.fetch("query_term_")
-    @course.department_id = params.fetch("query_department_id")
+    @course.title = params.fetch("q_title")
+    @course.term_offered = params.fetch("q_offered")
+    @course.department_id = params.fetch("q_department")
 
     if @course.valid?
       @course.save
@@ -27,12 +28,13 @@ class CoursesController < ApplicationController
   end
 
   def update
-    id = params.fetch("path_id")
-    @course = Course.where({ :id => the_id }).at(0)
+    the_id = params.fetch("path_id")
+    matching_course = Course.where({:id => the_id})
+    @course = matching_course.at(0)
 
-    @course.title = params.fetch("query_title")
-    @course.term_offered = params.fetch("query_term_offered")
-    @course.department_id = params.fetch("query_department_id")
+    @course.title = params.fetch("q_title")
+    @course.term_offered = params.fetch("q_offered")
+    @course.department_id = params.fetch("q_department")
 
     if @course.valid?
       @course.save
@@ -43,7 +45,7 @@ class CoursesController < ApplicationController
   end
 
   def destroy
-    the_id = params.fetch("path")
+    the_id = params.fetch("path_id")
     @course = Course.where({ :id => the_id }).at(0)
 
     @course.destroy
